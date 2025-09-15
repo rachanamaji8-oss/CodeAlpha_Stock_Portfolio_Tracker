@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Portfolio Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Stock Portfolio Tracker</h1>
+
+        <form method="POST">
+            <div class="stock-entry">
+                <label for="stock">Select Stock:</label>
+                <select name="stock" required>
+                    {% for stock in stocks %}
+                    <option value="{{ stock }}">{{ stock }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="quantity" min="1" required>
+
+                <button type="submit">Add to Portfolio</button>
+            </div>
+        </form>
+
+        <a href="{{ url_for('reset') }}">
+            <button class="reset-button">🔄 Reset Portfolio</button>
+        </a>
+
+        {% if result %}
+        <h2>Portfolio Summary</h2>
+        <table>
+            <tr>
+                <th>Stock</th>
+                <th>Quantity</th>
+                <th>Price ($)</th>
+                <th>Value ($)</th>
+            </tr>
+            {% for item in result.detailed %}
+            <tr>
+                <td>{{ item.stock }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Total Investment: ${{ result.total }}</h3>
+        {% endif %}
+    </div>
+</body>
+</html>
